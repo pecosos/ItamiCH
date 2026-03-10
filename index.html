@@ -250,6 +250,8 @@ Si haces clic en una bola del color incorrecto, perderás una vida.
   <h1>¡Has ganado!</h1>
 </div>
 
+  <video id="backgroundAudio" src="0310.mp4" loop playsinline style="display:none;"></video>
+
 <div id="footer">Hecho con energía del desierto desde Ciudad Obregón, México 🌵🔥</div>
 
 <script>
@@ -582,6 +584,13 @@ Si haces clic en una bola del color incorrecto, perderás una vida.
   function startGame(difficulty) {
     currentMode = difficulty; // Guardar modo para reset
 
+    // Reproducir audio al iniciar
+    const bgAudio = document.getElementById('backgroundAudio');
+    bgAudio.volume = 1; // ajustar volumen entre 0 y 1
+    bgAudio.play().catch(() => {
+        // evita errores si el navegador bloquea autoplay
+    });
+
     startEasyButton.style.display = 'none';
     startHardButton.style.display = 'none';
     game.style.display = 'block';
@@ -602,7 +611,7 @@ Si haces clic en una bola del color incorrecto, perderás una vida.
     activeColors = [...allColors.slice(0, 3)];
     resetGame();
     gameLoop();
-  }
+}
 
   startEasyButton.addEventListener('click', () => startGame('easy'));
   startHardButton.addEventListener('click', () => startGame('hard'));
@@ -641,4 +650,5 @@ game.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
