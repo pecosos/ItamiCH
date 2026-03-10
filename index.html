@@ -348,23 +348,18 @@ Si haces clic en una bola del color incorrecto, perderás una vida.
     ball.vx = velocity.vx;
     ball.vy = velocity.vy;
 
-    ball.addEventListener('click', () => {
-      if (ball.dataset.color === targetColor) {
-        score++;
-        scoreSpan.textContent = 'Puntos: ' + score;
-        playNote(440); // La (440 Hz) para acierto
-        checkLevelUp();
-        changeTargetColor();
-      } else {
-        lives--;
-        livesSpan.textContent = 'Vidas: ' + lives;
-        playNote(293.66); // Re (293.66 Hz) más grave para error
-        if (lives <= 0) {
-          alert('¡Juego terminado! Tu puntaje: ' + score);
-          resetGame();
-        }
-      }
-    });
+    ball.addEventListener('click', (e) => {
+  e.stopPropagation(); // evita que el clic “suba” al document
+  if (ball.dataset.color === targetColor) {
+    score++;
+    scoreSpan.textContent = 'Puntos: ' + score;
+    playNote(440);
+    checkLevelUp();
+    changeTargetColor();
+  } else {
+    wrongClick();
+  }
+});
 
     game.appendChild(ball);
     balls.push(ball);
@@ -511,11 +506,27 @@ Si haces clic en una bola del color incorrecto, perderás una vida.
   function startLevelTimer() {
     if (levelTimer) clearTimeout(levelTimer);
     startCountdown();
+
     levelTimer = setTimeout(() => {
-      alert('¡Se acabó el tiempo! No subiste de nivel a tiempo.');
-      resetGame();
+        lives--;
+        livesSpan.textContent = 'Vidas: ' + lives;
+        playNote(293.66); // sonido de error
+
+        if (lives <= 0) {
+            alert('¡Juego terminado! Tu puntaje: ' + score);
+            resetGame(); // reinicia todo
+        } else {
+            // Solo reiniciar nivel actual
+            alert('¡No seleccionaste ninguna bola a tiempo! Pierdes una vida.');
+            balls.forEach(ball => ball.remove());
+            balls = [];
+            const initialBalls = Math.min(maxBalls, 7);
+            for(let i=0; i<initialBalls; i++) createBall();
+            changeTargetColor();
+            startLevelTimer(); // reinicia el temporizador
+        }
     }, levelTimeLimit);
-  }
+}
 
   function resetGame() {
     // Aquí reiniciamos la velocidad base según el modo actual para evitar bug
@@ -596,8 +607,37 @@ Si haces clic en una bola del color incorrecto, perderás una vida.
   startEasyButton.addEventListener('click', () => startGame('easy'));
   startHardButton.addEventListener('click', () => startGame('hard'));
 
+
+  function wrongClick() {
+  lives--;
+  livesSpan.textContent = 'Vidas: ' + lives;
+  playNote(293.66); // sonido de error
+  if (lives <= 0) {
+    alert('¡Juego terminado! Tu puntaje: ' + score);
+    resetGame();
+  }
+}
+
+// Click o tap fuera de las bolas resta una vida
+game.addEventListener('click', () => {
+  wrongClick();
+});
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>
-
-
