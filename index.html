@@ -9,7 +9,7 @@
     margin: 0; 
     padding: 0;
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   body {
@@ -31,14 +31,16 @@
   }
 
   #game {
-    position: relative; 
-    width: 320px; 
-    height: 480px; 
-    border-radius: 10px;
-    overflow: hidden; 
-    margin-top: 20px;
-    display: none;
-  }
+  position: relative;
+  width: 95vw;
+  height: 70vh;
+  max-width: 500px;
+  max-height: 700px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+  display: none;
+}
 
   #background {
     position: absolute;
@@ -97,13 +99,12 @@
 }
 
 
-  h1 { font-size: 36px; margin: 0; }
+  h1 { font-size: clamp(24px, 6vw, 36px); }
   #instructions { font-size: 22px; margin-bottom: 10px; }
   #targetColor { font-size: 28px; font-weight: bold; }
   #score, #lives, #level, #timer {
-    font-size: 50px;
-    margin: 5px 10px;
-  }
+  font-size: clamp(18px, 5vw, 40px);
+}
 
   /* Botones nuevos */
   #startEasyButton, #startHardButton {
@@ -598,4 +599,5 @@ Si haces clic en una bola del color incorrecto, perderás una vida.
 </script>
 </body>
 </html>
+
 
